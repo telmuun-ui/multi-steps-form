@@ -50,12 +50,24 @@ export const validateStepTwo = (formValues) => {
 
 export const validateStepThree = (formValues) => {
   const errors = {};
+
   if (isEmpty(formValues.birthDay)) {
-    errors.birthDay = "Он сар аа оруулна уу";
+    errors.birthDay = "Төрсөн огноо оруулна уу";
+  } else {
+    const birthDate = new Date(formValues.birthDay);
+    const today = new Date();
+
+    today.setHours(0, 0, 0, 0);
+
+    if (birthDate > today) {
+      errors.birthDay = "Төрсөн огноо зөв оруулнa уу?";
+    }
   }
-  if (isEmpty(formValues.profile.name)) {
-    errors.profile = "Зураг аа оруулна уу";
+
+  if (isEmpty(formValues.profile)) {
+    errors.profile = "Зураг оруулна уу";
   }
+
   return {
     errors,
     isValid: Object.keys(errors).length === 0,

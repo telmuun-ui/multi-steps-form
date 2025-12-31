@@ -1,15 +1,14 @@
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
 import {
   ContactInfo,
   PrivateInfo,
   ProfileImage,
   Success,
 } from "@/components/steps";
-
 import { AnimatePresence, motion } from "framer-motion";
 import { animationVariant } from "@/constants/animation-variant";
 import { initialValues } from "@/constants/initials";
+import { retrieveFormValues } from "@/utils/localStorage";
 
 const Home = () => {
   const [step, setStep] = useState(0);
@@ -29,9 +28,17 @@ const Home = () => {
     setFormValues((previous) => ({ ...previous, [name]: value }));
     setFormErrors((previous) => ({ ...previous, [name]: "" }));
   };
-  console.log(formValues);
 
   const Container = [PrivateInfo, ContactInfo, ProfileImage, Success][step];
+
+  useEffect(() => {
+    const valueFromLocalStorage = retrieveFormValues();
+    if (valueFromLocalStorage) {
+      setFormValues(valueFromLocalStorage);
+      setStep(valueFromLocalStorage.step);
+    }
+  }, []);
+
   return (
     <AnimatePresence mode="wait">
       <div className="min-h-screen flex items-center justify-center bg-[#F4F4F4]">
@@ -51,6 +58,7 @@ const Home = () => {
             formValues={formValues}
             handleCont={handleCont}
             handlePrev={handlePrev}
+            setFormValues={setFormValues}
           />
         </motion.div>
       </div>

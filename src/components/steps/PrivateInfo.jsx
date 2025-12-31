@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Header } from "@/components/layer/Header";
 import { Footer } from "../layer/Footer";
 import { validateStepOne } from "@/utils/validators";
 import { Input, Label } from "../ui/Input";
 import { motion } from "framer-motion";
 import { animationVariant } from "@/constants/animation-variant";
+import { saveFormValues, retrieveFormValues } from "@/utils/localStorage";
 export const PrivateInfo = ({
   handleChange,
   formValues,
@@ -14,6 +15,7 @@ export const PrivateInfo = ({
   step,
   handleCont,
   handlePrev,
+  setFormValues,
   value,
 }) => {
   const handleSubmit = () => {
@@ -22,8 +24,15 @@ export const PrivateInfo = ({
 
     if (isValid) {
       handleCont();
+      saveFormValues(formValues, step);
     }
   };
+  useEffect(() => {
+    const valueFromLocalStorage = retrieveFormValues();
+    if (valueFromLocalStorage) {
+      setFormValues(valueFromLocalStorage);
+    }
+  }, []);
   return (
     <motion.div
       initial="enter"

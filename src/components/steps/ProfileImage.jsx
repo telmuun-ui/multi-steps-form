@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Header } from "@/components/layer/Header";
 import { Footer } from "../layer/Footer";
 import { motion } from "framer-motion";
 import { animationVariant } from "@/constants/animation-variant";
 import { validateStepThree } from "@/utils/validators";
-
+import {
+  saveFormValues,
+  retrieveFormValues,
+  deleteValues,
+} from "@/utils/localStorage";
 export const ProfileImage = ({
   handleChange,
   max,
@@ -14,18 +18,21 @@ export const ProfileImage = ({
   formValues,
   formErrors,
   setFormErrors,
+  setFormValues,
 }) => {
   const [preview, setPreview] = useState(null);
 
   const handleFile = (file) => {
     if (!file) return;
 
-    setPreview(URL.createObjectURL(file));
+    const localurl = URL.createObjectURL(file);
+
+    setPreview(localurl);
 
     handleChange({
       target: {
         name: "profile",
-        value: file,
+        value: localurl,
       },
     });
   };
@@ -36,6 +43,7 @@ export const ProfileImage = ({
 
     if (isValid) {
       handleCont();
+      deleteValues();
     }
   };
 

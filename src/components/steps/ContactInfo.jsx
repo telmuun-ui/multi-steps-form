@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Header } from "@/components/layer/Header";
 import { motion } from "framer-motion";
 import { Footer } from "../layer/Footer";
 import { animationVariant } from "@/constants/animation-variant";
 import { validateStepTwo } from "@/utils/validators";
+import { saveFormValues, retrieveFormValues } from "@/utils/localStorage";
 export const ContactInfo = ({
   handleChange,
   max,
@@ -13,6 +14,7 @@ export const ContactInfo = ({
   formValues,
   formErrors,
   setFormErrors,
+  setFormValues,
   value,
 }) => {
   const handleSubmit = () => {
@@ -21,8 +23,15 @@ export const ContactInfo = ({
 
     if (isValid) {
       handleCont();
+      saveFormValues(formValues, step);
     }
   };
+  useEffect(() => {
+    const valueFromLocalStorage = retrieveFormValues();
+    if (valueFromLocalStorage) {
+      setFormValues(valueFromLocalStorage);
+    }
+  }, []);
   return (
     <motion.div
       initial="enter"
